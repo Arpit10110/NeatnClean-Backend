@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true,
         default:"client",
-        enum:["client","worker","admin"]
+        enum:["client","worker","admin","user"]
     }
 });
 
