@@ -116,3 +116,24 @@ export const updatekyc = async(req,res,next)=>{
     return next(new ErrorHandler(error.message,500,false) )
   }
 }
+
+
+
+export const getworkerprofile = async(req,res,next)=>{
+  try {
+    const { userid } =await req.user; 
+    const user_data = await UserModel.findById(userid);
+    if(user_data.role != "worker"){
+      return next(new ErrorHandler("Please Login as Worker",401,false))
+    }
+    const WorkerKyc = await WorkerKycModel.find({worker_id:userid});
+    return res.json({
+      success: true,
+      message: "Worker profile fetched successfully",
+      worker_profile:user_data,
+      kyc_data:WorkerKyc
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message,500,false) )
+  }
+}

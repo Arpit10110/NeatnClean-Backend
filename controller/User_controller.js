@@ -42,7 +42,9 @@ export const generateotp = async (req, res,next) => {
         { otp: hashotp, createdAt: new Date() },
         { upsert: true, new: true }
       );
-     await otpsender(phone,otp,res,next)
+      return res.json({ success: true, message: "OTP sent successfully" ,otp});
+
+    //  await otpsender(phone,otp,res,next)
     } catch (error) {
       console.log(error?.response?.data || error.message || error);
       return next(new ErrorHandler(error.message,500,false))
@@ -53,6 +55,7 @@ export const generateotp = async (req, res,next) => {
 export const verifyotp = async(req, res,next) =>{
     try {
         const {name,address, phone, otp , role} = await req.body;
+        console.log(phone,otp,name,address,role)
         if(!phone || !otp || !name || !address || !role){
             return next(new ErrorHandler("Please provide all the details",400,false))
         }
