@@ -4,23 +4,22 @@ import ErrorHandler from '../utils/Error_handler.js';
 import { WorkerKycModel } from '../model/worker_kyc.model.js';
 import { UserModel } from '../model/user.model.js';
 
-export const uploadController = async (req, res,next) => {
+export const uploadController = async (req, res, next) => {
   try {
     if (!req.file) {
-        return next(new ErrorHandler("No file uploaded or image name not provided",400,false))
+      return next(new ErrorHandler("No file uploaded or image name not provided", 400, false));
     }
-    const cloud_res = await UploadonCloudinary(req.file.path);
+
+    // Pass the buffer instead of file path
+    const cloud_res = await UploadonCloudinary(req.file.buffer);
+    
     if (!cloud_res.success) {
       return next(new ErrorHandler(cloud_res.message, 500, false));
     }
-    const result = await cloud_res.result
-    await fs.unlink(req.file.path, (err) => {
-      if (err) {
-        console.error('Failed to delete local file:', err);
-      } else {
-        console.log('Local file deleted:', req.file.path);
-      }
-    });
+
+    const result = cloud_res.result;
+
+    // No need to delete local files since we're using memory storage
     return res.json({
       success: true,
       message: "Image uploaded successfully",
@@ -30,6 +29,7 @@ export const uploadController = async (req, res,next) => {
     return next(new ErrorHandler(error.message, 500, false));
   }
 };
+
 
 export const submit_kyc_data = async (req, res,next) => {
   try {

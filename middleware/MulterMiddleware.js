@@ -1,16 +1,7 @@
 import multer from 'multer';
-import path from 'path';
 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); 
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-
+// Switch to memory storage
+const storage = multer.memoryStorage();
 const uploadImage = multer({ storage }).single('image');
 
 export default uploadImage;
