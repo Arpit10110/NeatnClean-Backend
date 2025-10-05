@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { errormiddleware } from './middleware/Error_middleware.js';
 import workerrouter from './routes/v1/worker_route.js';
 import service_route from './routes/v1/service_route.js';
+import admin_route from './routes/v1/admin_route.js';
 config();
 const app = express();
 app.use(cookieParser())
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/v1/user", userrouter);
 app.use("/v1/worker", workerrouter);
 app.use("/v1/service", service_route);
+app.use("/v1/admin", admin_route);
 //error handler
 app.use(errormiddleware)
 export default app;
