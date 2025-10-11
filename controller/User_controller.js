@@ -36,7 +36,6 @@ export const generateotp = async (req, res,next) => {
   
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
       const hashotp = await bcrypt.hash(otp, 10);
-  
       await Otpmodel.findOneAndUpdate(
         { phone },
         { otp: hashotp, createdAt: new Date() },
@@ -53,7 +52,6 @@ export const generateotp = async (req, res,next) => {
 export const verifyotp = async(req, res,next) =>{
     try {
         const {name,address, phone, otp , role} = await req.body;
-        console.log(phone,otp,name,address,role)
         if(!phone || !otp || !name || !address || !role){
             return next(new ErrorHandler("Please provide all the details",400,false))
         }
